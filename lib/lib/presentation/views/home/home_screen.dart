@@ -13,13 +13,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
+  static const List<Widget> _widgetOptions = <Widget>[
+    MovieScreen(),
+    ComingSoonScreen(),
+    ComingSoonScreen()
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flix Watch'),
       ),
-      body: [const MovieScreen(), const ComingSoonScreen()][_selectedIndex],
+      body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: NavigationBar(
           selectedIndex: 0,
           onDestinationSelected: (index) =>
