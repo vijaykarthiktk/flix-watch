@@ -15,11 +15,13 @@ class ApiClient {
   Future<Response> get(String path,
       { Map<String, dynamic>? queryParameters,
         String movieID = 'movie_id',
-        Map<String, dynamic> appendToResponse = const {}
+        String appendToResponse = ''
       }) async {
     try {
       final response = await _dio.get(path.replaceAll('{movie_id}', movieID),
-          queryParameters: queryParameters?..addAll(appendToResponse));
+          queryParameters: queryParameters?..addAll({
+            'append_to_response': appendToResponse
+          }));
       return response;
     } catch (e) {
       throw Exception(e.toString());
