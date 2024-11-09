@@ -1,3 +1,4 @@
+import 'package:flixwatch/core/utils/tmdb_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../../domain/entities/movie.dart';
@@ -27,16 +28,15 @@ class MovieCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-              child: CachedNetworkImage(
-                imageUrl: movie.fullPosterPath,
-                fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) =>
-                const Icon(Icons.error),
-              )
-            ),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
+                child: CachedNetworkImage(
+                  imageUrl: movie.fullPosterPath,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                )),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -48,15 +48,11 @@ class MovieCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
-                      const SizedBox(width: 4),
-                      Text(
-                        movie.formattedRating,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
+                  Text(
+                    movie.genreIds
+                        .map((id) => TMDBConstants.movieGenres[id])
+                        .join(', '),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
