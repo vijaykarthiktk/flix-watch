@@ -3,28 +3,25 @@ import 'package:provider/provider.dart';
 import '../../viewmodels/movie_view_model.dart';
 import 'widgets/movie_card.dart';
 
-class MovieListView extends StatefulWidget {
-  const MovieListView({super.key});
+class MovieScreen extends StatefulWidget {
+  const MovieScreen({super.key});
 
   @override
-  State<MovieListView> createState() => _MovieListViewState();
+  State<MovieScreen> createState() => _MovieScreenState();
 }
 
-class _MovieListViewState extends State<MovieListView> {
+class _MovieScreenState extends State<MovieScreen> {
   @override
   void initState() {
     super.initState();
     Future.microtask(
-          () => context.read<MovieViewModel>().loadMovies(),
+      () => context.read<MovieViewModel>().loadMovies(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Popular Movies'),
-      ),
       body: Consumer<MovieViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.movies.isEmpty) {
@@ -43,8 +40,7 @@ class _MovieListViewState extends State<MovieListView> {
               final movie = viewModel.movies[index];
               return MovieCard(
                 movie: movie,
-                onTap: () {
-                },
+                onTap: () {},
               );
             },
           );
