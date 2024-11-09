@@ -4,4 +4,5 @@ class Constants {
   static const String logoBaseUrl = 'https://image.tmdb.org/t/p/original';
   static const String popularMoviesEndpoint = '/movie/popular';
   static const String movieCreditsEndpoint = '/movie/{movie_id}/credits';
+  static String movieDetailsEndpoint = '/movie/{movie_id}';
 }
