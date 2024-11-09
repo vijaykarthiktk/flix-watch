@@ -1,3 +1,4 @@
+import '../../core/utils/constants.dart';
 import '../../domain/entities/movie.dart';
 
 class MovieDetailsModel extends Movie {
@@ -28,7 +29,6 @@ class MovieDetailsModel extends Movie {
     required this.productionCompanies,
     required this.productionCountries,
     required this.spokenLanguages,
-
     required super.id,
     required super.title,
     required super.originalTitle,
@@ -43,8 +43,7 @@ class MovieDetailsModel extends Movie {
     required super.video,
     required super.genreIds,
     required super.originalLanguage,
-
-  }) :super();
+  }) : super();
 
   factory MovieDetailsModel.fromJson(Map<String, dynamic> json) {
     return MovieDetailsModel(
@@ -107,12 +106,15 @@ class MovieDetailsModel extends Movie {
       'imdb_id': imdbId,
       'origin_country': originCountry,
       'production_companies':
-      productionCompanies.map((x) => x.toJson()).toList(),
+          productionCompanies.map((x) => x.toJson()).toList(),
       'production_countries':
-      productionCountries.map((x) => x.toJson()).toList(),
+          productionCountries.map((x) => x.toJson()).toList(),
       'spoken_languages': spokenLanguages.map((x) => x.toJson()).toList(),
     };
   }
+
+  String get logoBaseUrl =>
+      '${Constants.logoBaseUrl}$backdropPath';
 }
 
 class GenreModel {
