@@ -22,6 +22,14 @@ cupertino_icons
 3.1
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.8/
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.8/lib/
+dio
+2.18
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/dio-5.7.0/
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/dio-5.7.0/lib/
+dio_web_adapter
+3.3
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/dio_web_adapter-2.0.0/
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/dio_web_adapter-2.0.0/lib/
 equatable
 2.12
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/equatable-2.0.5/
@@ -34,6 +42,10 @@ flutter_lints
 3.1
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/flutter_lints-4.0.0/
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/flutter_lints-4.0.0/lib/
+http_parser
+2.12
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/http_parser-4.0.2/
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/http_parser-4.0.2/lib/
 leak_tracker
 3.2
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5/
@@ -90,6 +102,10 @@ test_api
 3.2
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/test_api-0.7.2/
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/test_api-0.7.2/lib/
+typed_data
+3.5
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/typed_data-1.4.0/
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/typed_data-1.4.0/lib/
 vector_math
 2.14
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/vector_math-2.1.4/
@@ -98,6 +114,10 @@ vm_service
 3.3
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/vm_service-14.2.5/
 file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/vm_service-14.2.5/lib/
+web
+3.4
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/web-1.1.0/
+file:///Users/vijaykarthik/.pub-cache/hosted/pub.dev/web-1.1.0/lib/
 flixwatch
 3.5
 file:///Users/vijaykarthik/StudioProjects/Github/flix-watch/
