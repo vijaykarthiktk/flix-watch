@@ -2,6 +2,7 @@ import 'core/network/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'core/themes/app_theme.dart';
 import 'data/repositories/movie_repository.dart';
 import 'data/services/movie_service.dart';
 import 'lib/presentation/viewmodels/movie_view_model.dart';
@@ -18,10 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FlixWatch',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
       home: MultiProvider(providers: [
         Provider(create: (_) => ApiClient()),
         ProxyProvider<ApiClient, MovieService>(
