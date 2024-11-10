@@ -32,11 +32,6 @@ class MyApp extends StatelessWidget {
           update: (_, repository, viewModel) =>
           viewModel ?? MovieViewModel(repository),
         ),
-        ChangeNotifierProxyProvider<MovieRepository, MovieViewModel>(
-          create: (context) => MovieViewModel(context.read<MovieRepository>()),
-          update: (_, repository, viewModel) =>
-          viewModel ?? MovieViewModel(repository),
-        ),
         ChangeNotifierProxyProvider<MovieRepository, MovieDetailsViewModel>(
           create: (context) => MovieDetailsViewModel(context.read<MovieRepository>()),
           update: (_, repository, viewModel) =>
