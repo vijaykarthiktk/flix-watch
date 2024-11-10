@@ -15,8 +15,8 @@ class MovieService {
       final response = await _apiClient.get(Constants.popularMoviesEndpoint);
       final results = response.data['results'] as List;
       return results.map((movie) => MovieModel.fromJson(movie)).toList();
-    } catch (e) {
-      throw UnknownFailure('Failed to fetch popular movies: ${e.toString()}');
+    } catch (e, s) {
+      throw UnknownFailure('Failed to fetch popular movies: ${e.toString()}', stackTrace: s);
     }
   }
 
@@ -25,8 +25,8 @@ class MovieService {
       final response = await _apiClient.get(Constants.movieDetailsEndpoint,
           movieID: movieID);
       return MovieDetailsModel.fromJson(response.data);
-    } catch (e) {
-      throw UnknownFailure('Failed to fetch movie: ${e.toString()}');
+    } catch (e, s) {
+      throw UnknownFailure('Failed to fetch movie: ${e.toString()}', stackTrace: s);
     }
   }
 }
