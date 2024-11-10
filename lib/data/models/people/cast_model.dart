@@ -1,3 +1,5 @@
+import 'package:flixwatch/core/utils/constants.dart';
+
 import '../../../domain/entities/people.dart';
 
 class CastModel extends People {
@@ -35,7 +37,7 @@ class CastModel extends People {
       knownForDepartment: json['known_for_department'] as String,
       name: json['name'] as String,
       popularity: json['popularity'] as double,
-      profilePath: json['profile_path'] as String,
+      profilePath: (json['profile_path'] ?? null),
     );
   }
 
@@ -59,5 +61,6 @@ class CastModel extends People {
     return 'CastModel{originalName: $originalName, castId: $castId, character: $character, creditId: $creditId, order: $order}';
   }
 
+  get fullProfilePath => profilePath != null ? '${Constants.logoBaseUrl}$profilePath' : null;
 
 }
