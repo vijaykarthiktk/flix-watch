@@ -1,3 +1,6 @@
+import 'package:flixwatch/data/repositories/people/cast_repository.dart';
+import 'package:flixwatch/lib/presentation/viewmodels/cast_view_model.dart';
+
 import 'core/network/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +39,12 @@ class MyApp extends StatelessWidget {
           create: (context) => MovieDetailsViewModel(context.read<MovieRepository>()),
           update: (_, repository, viewModel) =>
           viewModel ?? MovieDetailsViewModel(repository),
-        )
+        ),
+        ChangeNotifierProxyProvider<CastRepositoryImpl, CastViewModel>(
+          create: (context) => CastViewModel(context.read<CastRepositoryImpl>()),
+          update: (_, repository, viewModel) =>
+          viewModel ?? CastViewModel(repository),
+        ),
       ],
       child: MaterialApp(
         title: 'FlixWatch',
