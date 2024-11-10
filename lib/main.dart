@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'core/themes/app_theme.dart';
 import 'data/repositories/movie_repository.dart';
 import 'data/services/movie_service.dart';
+import 'data/services/people/cast_service.dart';
 import 'lib/presentation/viewmodels/movie_details_view_model.dart';
 import 'lib/presentation/viewmodels/movie_view_model.dart';
 import 'lib/presentation/views/home/home_screen.dart';
@@ -24,12 +25,21 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(create: (_) => ApiClient()),
+
         ProxyProvider<ApiClient, MovieService>(
           update: (_, apiClient, __) => MovieService(apiClient),
         ),
+        ProxyProvider<ApiClient, CastService>(
+          update: (_, apiClient, __) => CastService(apiClient),
+        ),
+
         ProxyProvider<MovieService, MovieRepository>(
           update: (_, movieService, __) => MovieRepository(movieService),
         ),
+        ProxyProvider<CastService, CastRepositoryImpl>(
+          update: (_, castService, __) => CastRepositoryImpl(castService),
+        ),
+
         ChangeNotifierProxyProvider<MovieRepository, MovieViewModel>(
           create: (context) => MovieViewModel(context.read<MovieRepository>()),
           update: (_, repository, viewModel) =>
@@ -40,6 +50,7 @@ class MyApp extends StatelessWidget {
           update: (_, repository, viewModel) =>
           viewModel ?? MovieDetailsViewModel(repository),
         ),
+
         ChangeNotifierProxyProvider<CastRepositoryImpl, CastViewModel>(
           create: (context) => CastViewModel(context.read<CastRepositoryImpl>()),
           update: (_, repository, viewModel) =>
