@@ -1,19 +1,23 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flixwatch/core/utils/tmdb_constants.dart';
+import '../../../../core/utils/tmdb_constants.dart';
+import '../../viewmodels/cast_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../data/models/movie_details_model.dart';
+import '../../../../data/models/people/cast_model.dart';
 import '../../viewmodels/movie_details_view_model.dart';
 
 class MovieDetailsView extends StatefulWidget {
   final String movieId;
 
   const MovieDetailsView({
-    Key? key,
+    super.key,
     required this.movieId,
-  }) : super(key: key);
+  });
 
   @override
   State<MovieDetailsView> createState() => _MovieDetailsViewState();
@@ -26,72 +30,168 @@ class _MovieDetailsViewState extends State<MovieDetailsView> {
     Future.microtask(
           () => context.read<MovieDetailsViewModel>().loadMovieDetails(widget.movieId),
     );
+    Future.microtask(
+          () => context.read<CastViewModel>().loadCast(widget.movieId),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      body: Consumer<MovieDetailsViewModel>(
-        builder: (context, viewModel, child) {
-          if (viewModel.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (viewModel.state == MovieDetailsState.error) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(viewModel.error),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => viewModel.retry(widget.movieId),
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final MovieDetailsModel? movieDetails = viewModel.movieDetails;
-          if (movieDetails == null) {
-            return const Center(child: Text('No details available'));
-          }
-
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Movie backdrop
-                  MoviePoster(movieDetails: movieDetails),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      body: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Column(
+          children: [
+            Consumer<MovieDetailsViewModel>(
+              builder: (context, viewModel, child) {
+                if (viewModel.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (viewModel.state == MovieDetailsState.error) {
+                  return Center(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'Summary',
-                          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: colorScheme.primary,
-                          ),
+                        Text(viewModel.error),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () => viewModel.retry(widget.movieId),
+                          child: const Text('Retry'),
                         ),
-                        const SizedBox(height: 16),
-                        Text(movieDetails.overview),
-                        const SizedBox(height: 16),
-                        // Add more details as needed
                       ],
                     ),
-                  ),
-                ],
+                  );
+                }
+
+                final MovieDetailsModel? movieDetails = viewModel.movieDetails;
+                if (movieDetails == null) {
+                  return const Center(child: Text('No details available'));
+                }
+                return  Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Movie backdrop
+                    MoviePoster(movieDetails: movieDetails),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Summary',
+                            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(movieDetails.overview),
+                          const SizedBox(height: 16),
+                          // Add more details as needed
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Consumer<CastViewModel>(
+                builder: (context, viewModel, child) {
+                  if (viewModel.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (viewModel.state == CastDetailsState.error) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(viewModel.error),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () => viewModel.retry(widget.movieId),
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  final List<CastModel> cast = viewModel.cast;
+                  if (cast.isEmpty) {
+                    return const Center(child: Text('No cast available'));
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Cast',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 288),
+                        child: ListView.builder(
+                          itemCount: (cast.length ~/ 4),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: MediaQuery.removePadding(
+                                context: context,
+                                removeTop: true,
+                                removeBottom: true,
+                                removeLeft: true,
+                                child: ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: min(4, (cast.length - ((index + 1) * 4)) + 4),
+                                  itemBuilder: (context, index1) => CastCard(person: cast[((index) * 4) + index1])
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),                    ],
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CastCard extends StatelessWidget {
+  final CastModel person;
+
+  const CastCard({super.key, required this.person});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: person.profilePath == null
+            ? const Icon(Icons.person, size: 50)
+            : Container(
+              width: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: CachedNetworkImageProvider(person.fullProfilePath ?? ""),
+                ),
               ),
             ),
-          );
-        },
-      ),
+      title: Text(person.name),
+      subtitle: Text(person.character),
+      contentPadding: const EdgeInsets.only(left: 0.0, right: 0.0),
     );
   }
 }
