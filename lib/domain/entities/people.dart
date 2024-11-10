@@ -5,7 +5,7 @@ class People {
   final String knownForDepartment;
   final String name;
   final double popularity;
-  final String profilePath;
+  final String? profilePath;
 
   const People({
     required this.adult,
@@ -14,6 +14,6 @@ class People {
     required this.knownForDepartment,
     required this.name,
     required this.popularity,
-    required this.profilePath,
+    this.profilePath,
   });
 }
