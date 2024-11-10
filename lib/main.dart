@@ -37,6 +37,11 @@ class MyApp extends StatelessWidget {
           update: (_, repository, viewModel) =>
           viewModel ?? MovieViewModel(repository),
         ),
+        ChangeNotifierProxyProvider<MovieRepository, MovieDetailsViewModel>(
+          create: (context) => MovieDetailsViewModel(context.read<MovieRepository>()),
+          update: (_, repository, viewModel) =>
+          viewModel ?? MovieDetailsViewModel(repository),
+        )
       ],
       child: MaterialApp(
         title: 'FlixWatch',
