@@ -10,9 +10,9 @@ class MovieDetailsModel extends Movie {
   final List<ProductionCountryModel> productionCountries;
   final List<SpokenLanguageModel> spokenLanguages;
 
-  final bool budget;
-  final bool revenue;
-  final bool runtime;
+  final int budget;
+  final int revenue;
+  final int runtime;
   final String status;
   final String tagline;
 
@@ -135,13 +135,13 @@ class GenreModel {
 
 class ProductionCompanyModel {
   final int id;
-  final String logoPath;
+  final String? logoPath;
   final String name;
   final String originCountry;
 
   ProductionCompanyModel({
     required this.id,
-    required this.logoPath,
+    this.logoPath,
     required this.name,
     required this.originCountry,
   });
@@ -149,7 +149,7 @@ class ProductionCompanyModel {
   factory ProductionCompanyModel.fromJson(Map<String, dynamic> json) {
     return ProductionCompanyModel(
       id: json['id'],
-      logoPath: json['logo_path'],
+      logoPath: json['logo_path'] ?? "",
       name: json['name'],
       originCountry: json['origin_country'],
     );
