@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../domain/entities/movie.dart';
 import '../../viewmodels/movie_view_model.dart';
+import '../movie_details/movie_details_screen.dart';
 import 'widgets/movie_card.dart';
 
 class MovieScreen extends StatefulWidget {
@@ -37,10 +39,15 @@ class _MovieScreenState extends State<MovieScreen> {
             ),
             itemCount: viewModel.movies.length,
             itemBuilder: (context, index) {
-              final movie = viewModel.movies[index];
+              final Movie movie = viewModel.movies[index];
               return MovieCard(
                 movie: movie,
-                onTap: () {},
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MovieDetailsView(movieId: movie.id.toString()),
+                  ),
+                ),
               );
             },
           );
