@@ -36,6 +36,9 @@ class Movie {
   String get fullPosterPath =>
       '${Constants.imageBaseUrl}$posterPath';
 
+  String get fullBackdropPath =>
+      '${Constants.imageBaseUrl}$backdropPath';
+
   String get formattedRating =>
       voteAverage.toStringAsFixed(1);
 }
