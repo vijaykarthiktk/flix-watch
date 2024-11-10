@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'core/themes/app_theme.dart';
 import 'data/repositories/movie_repository.dart';
 import 'data/services/movie_service.dart';
+import 'lib/presentation/viewmodels/movie_details_view_model.dart';
 import 'lib/presentation/viewmodels/movie_view_model.dart';
 import 'lib/presentation/views/home/home_screen.dart';
 
@@ -17,12 +18,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FlixWatch',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      home: MultiProvider(providers: [
+    return MultiProvider(
+      providers: [
         Provider(create: (_) => ApiClient()),
         ProxyProvider<ApiClient, MovieService>(
           update: (_, apiClient, __) => MovieService(apiClient),
@@ -33,9 +30,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<MovieRepository, MovieViewModel>(
           create: (context) => MovieViewModel(context.read<MovieRepository>()),
           update: (_, repository, viewModel) =>
-              viewModel ?? MovieViewModel(repository),
+          viewModel ?? MovieViewModel(repository),
         ),
-      ], child: const HomeScreen()),
+        ChangeNotifierProxyProvider<MovieRepository, MovieViewModel>(
+          create: (context) => MovieViewModel(context.read<MovieRepository>()),
+          update: (_, repository, viewModel) =>
+          viewModel ?? MovieViewModel(repository),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'FlixWatch',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.system,
+        home: const HomeScreen(),
+      ),
     );
   }
 }
