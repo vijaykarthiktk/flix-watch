@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flixwatch/core/secrets/secrets.dart';
 
+import '../error/failures.dart';
+
 class ApiClient {
   final Dio _dio;
 
@@ -23,8 +25,8 @@ class ApiClient {
             'append_to_response': appendToResponse
           }));
       return response;
-    } catch (e) {
-      throw Exception(e.toString());
+    } catch (e,s) {
+      throw UnknownFailure(e.toString(), stackTrace: s);
     }
   }
 }

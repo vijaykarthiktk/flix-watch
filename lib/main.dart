@@ -7,8 +7,11 @@ import 'package:provider/provider.dart';
 
 import 'core/themes/app_theme.dart';
 import 'data/repositories/movie_repository.dart';
+import 'data/repositories/people/crew_repository.dart';
 import 'data/services/movie_service.dart';
 import 'data/services/people/cast_service.dart';
+import 'data/services/people/crew_service.dart';
+import 'lib/presentation/viewmodels/crew_view_model.dart';
 import 'lib/presentation/viewmodels/movie_details_view_model.dart';
 import 'lib/presentation/viewmodels/movie_view_model.dart';
 import 'lib/presentation/views/home/home_screen.dart';
@@ -32,12 +35,18 @@ class MyApp extends StatelessWidget {
         ProxyProvider<ApiClient, CastService>(
           update: (_, apiClient, __) => CastService(apiClient),
         ),
+        ProxyProvider<ApiClient, CrewService>(
+          update: (_, apiClient, __) => CrewService(apiClient),
+        ),
 
         ProxyProvider<MovieService, MovieRepository>(
           update: (_, movieService, __) => MovieRepository(movieService),
         ),
         ProxyProvider<CastService, CastRepositoryImpl>(
           update: (_, castService, __) => CastRepositoryImpl(castService),
+        ),
+        ProxyProvider<CrewService, CrewRepositoryImpl>(
+          update: (_, castService, __) => CrewRepositoryImpl(castService),
         ),
 
         ChangeNotifierProxyProvider<MovieRepository, MovieViewModel>(
@@ -55,6 +64,11 @@ class MyApp extends StatelessWidget {
           create: (context) => CastViewModel(context.read<CastRepositoryImpl>()),
           update: (_, repository, viewModel) =>
           viewModel ?? CastViewModel(repository),
+        ),
+        ChangeNotifierProxyProvider<CrewRepositoryImpl, CrewViewModel>(
+          create: (context) => CrewViewModel(context.read<CrewRepositoryImpl>()),
+          update: (_, repository, viewModel) =>
+          viewModel ?? CrewViewModel(repository),
         ),
       ],
       child: MaterialApp(

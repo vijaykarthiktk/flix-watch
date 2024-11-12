@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import '../../../../data/models/people/crew_model.dart';
+import '../../viewmodels/crew_view_model.dart';
 import '../../../../core/utils/tmdb_constants.dart';
 import '../../viewmodels/cast_view_model.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,9 @@ class _MovieDetailsViewState extends State<MovieDetailsView> {
     );
     Future.microtask(
           () => context.read<CastViewModel>().loadCast(widget.movieId),
+    );
+    Future.microtask(
+          () => context.read<CrewViewModel>().loadCrew(widget.movieId),
     );
   }
 
@@ -149,9 +154,9 @@ class _MovieDetailsViewState extends State<MovieDetailsView> {
                                 removeBottom: true,
                                 removeLeft: true,
                                 child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: min(4, (cast.length - ((index + 1) * 4)) + 4),
-                                  itemBuilder: (context, index1) => CastCard(person: cast[((index) * 4) + index1])
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: min(4, (cast.length - ((index + 1) * 4)) + 4),
+                                    itemBuilder: (context, index1) => CastCard(person: cast[((index) * 4) + index1])
                                 ),
                               ),
                             );
@@ -161,7 +166,75 @@ class _MovieDetailsViewState extends State<MovieDetailsView> {
                   );
                 },
               ),
-            )
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Consumer<CrewViewModel>(
+                builder: (context, viewModel, child) {
+                  if (viewModel.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (viewModel.state == CrewDetailsState.error) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(viewModel.error),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () => viewModel.retry(widget.movieId),
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  final List<CrewModel> crew = viewModel.crew;
+                  if (crew.isEmpty) {
+                    return const Center(child: Text('No crew available'));
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Crew',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 288),
+                        child: ListView.builder(
+                          itemCount: (crew.length ~/ 4),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: MediaQuery.removePadding(
+                                context: context,
+                                removeTop: true,
+                                removeBottom: true,
+                                removeLeft: true,
+                                child: ListView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: min(4, (crew.length - ((index + 1) * 4)) + 4),
+                                    itemBuilder: (context, index1) => CrewCard(person: crew[((index) * 4) + index1])
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -178,7 +251,7 @@ class CastCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: person.profilePath == null
-            ? const Icon(Icons.person, size: 50)
+            ? const Icon(Icons.face, size: 50)
             : Container(
               width: 50,
               decoration: BoxDecoration(
@@ -195,6 +268,34 @@ class CastCard extends StatelessWidget {
     );
   }
 }
+
+class CrewCard extends StatelessWidget {
+  final CrewModel person;
+
+  const CrewCard({super.key, required this.person});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: person.profilePath == null
+          ? const Icon(Icons.face, size: 50)
+          : Container(
+        width: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: CachedNetworkImageProvider(person.fullProfilePath ?? ""),
+          ),
+        ),
+      ),
+      title: Text(person.name),
+      subtitle: Text(person.department),
+      contentPadding: const EdgeInsets.only(left: 0.0, right: 0.0),
+    );
+  }
+}
+
 class MoviePoster extends StatelessWidget {
   const MoviePoster({
     super.key,

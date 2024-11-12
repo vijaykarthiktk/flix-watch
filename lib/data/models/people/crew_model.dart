@@ -1,3 +1,4 @@
+import '../../../core/utils/constants.dart';
 import '../../../domain/entities/people.dart';
 
 class CrewModel extends People {
@@ -51,4 +52,7 @@ class CrewModel extends People {
       'job': job,
     };
   }
+
+  get fullProfilePath => profilePath != null ? '${Constants.logoBaseUrl}$profilePath' : null;
+
 }
